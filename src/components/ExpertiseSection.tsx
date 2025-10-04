@@ -1,6 +1,7 @@
 import { Play, Clock, Target, Rocket, Pencil } from "lucide-react";
 import { useState } from "react";
 import videoThumbnail from "@/assets/video-thumbnail.jpg";
+import BlobVideo from "@/components/BlobVideo";
 
 const ExpertiseSection = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -76,48 +77,11 @@ const ExpertiseSection = () => {
             <div className="absolute bottom-32 left-10 w-16 h-16 border-2 border-muted rounded-full opacity-30" />
             <div className="absolute top-40 left-0 w-12 h-12 border-2 border-muted rounded-full opacity-30" />
 
-            {/* Video Container with Blob Shape */}
-            <div className="relative w-full max-w-[550px]">
-              <div 
-                className="relative overflow-hidden shadow-2xl"
-                style={{
-                  clipPath: "ellipse(45% 50% at 50% 50%)",
-                  aspectRatio: "1/1",
-                  borderRadius: "40% 60% 70% 30% / 40% 50% 60% 50%"
-                }}
-              >
-                {/* Video Background */}
-                <div 
-                  className="absolute inset-0 bg-cover bg-center scale-110"
-                  style={{ backgroundImage: `url(${videoThumbnail})` }}
-                />
-                
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-900/40 to-slate-800/40" />
-
-                {/* Play Button - Centered */}
-                <button
-                  onClick={() => setIsPlaying(!isPlaying)}
-                  className="absolute inset-0 flex items-center justify-center group"
-                  aria-label="Play video"
-                >
-                  <div className="relative">
-                    {/* Outer glow ring */}
-                    <div className="absolute inset-0 bg-white rounded-full opacity-20 blur-xl scale-150" />
-                    
-                    {/* Pulse ring */}
-                    <div className="absolute inset-0 bg-white rounded-full opacity-30 animate-ping" />
-                    
-                    {/* Main Play Button */}
-                    <div className="relative bg-white w-20 h-20 rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300 border-4 border-white/50">
-                      <Play className="w-8 h-8 text-slate-900 fill-slate-900 ml-1" />
-                    </div>
-                  </div>
-                </button>
-              </div>
-
-              {/* Glow effect behind blob */}
+            {/* Exact blob video */}
+            <div className="relative">
               <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 blur-3xl scale-110" />
+              {/* @ts-ignore poster is typed */}
+              <BlobVideo poster={videoThumbnail} onPlay={() => setIsPlaying(!isPlaying)} />
             </div>
           </div>
         </div>
