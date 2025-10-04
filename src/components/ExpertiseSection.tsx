@@ -77,12 +77,13 @@ const ExpertiseSection = () => {
             <div className="absolute top-40 left-0 w-12 h-12 border-2 border-muted rounded-full opacity-30" />
 
             {/* Video Container with Blob Shape */}
-            <div className="relative w-full max-w-[500px]">
+            <div className="relative w-full max-w-[550px]">
               <div 
                 className="relative overflow-hidden shadow-2xl"
                 style={{
-                  clipPath: "polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%)",
-                  aspectRatio: "1/1"
+                  clipPath: "ellipse(45% 50% at 50% 50%)",
+                  aspectRatio: "1/1",
+                  borderRadius: "40% 60% 70% 30% / 40% 50% 60% 50%"
                 }}
               >
                 {/* Video Background */}
