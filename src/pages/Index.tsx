@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import TechBanner from "@/components/TechBanner";
 import ExpertiseSection from "@/components/ExpertiseSection";
+import NewsletterPopup from "@/components/NewsletterPopup";
 
 const Index = () => {
   return (
@@ -10,6 +11,7 @@ const Index = () => {
       <Hero />
       <TechBanner />
       <ExpertiseSection />
+      <NewsletterPopup />
     </div>
   );
 };
