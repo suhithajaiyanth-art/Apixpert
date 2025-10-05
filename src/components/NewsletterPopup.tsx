@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import { X, Instagram, Send, Mail, Globe } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import newsletterImage from "@/assets/newsletter-person.png";
+import newsletterImage from "@/assets/newsletter-person.jpg";
 
 const NewsletterPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [closeButtonPos, setCloseButtonPos] = useState({ x: 0, y: 0 });
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [email, setEmail] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
     // Show popup after a brief delay
@@ -23,36 +24,29 @@ const NewsletterPopup = () => {
     if (!isOpen) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      const closeBtn = document.getElementById('dodge-close-btn');
-      if (!closeBtn) return;
+      setCursorPos({ x: e.clientX, y: e.clientY });
+    };
 
-      const btnRect = closeBtn.getBoundingClientRect();
-      const btnCenterX = btnRect.left + btnRect.width / 2;
-      const btnCenterY = btnRect.top + btnRect.height / 2;
-      
-      const distance = Math.sqrt(
-        Math.pow(e.clientX - btnCenterX, 2) + Math.pow(e.clientY - btnCenterY, 2)
-      );
-
-      // If mouse is within 100px, move button away
-      if (distance < 100) {
-        const angle = Math.atan2(btnCenterY - e.clientY, btnCenterX - e.clientX);
-        const moveDistance = 30;
-        const newX = Math.cos(angle) * moveDistance;
-        const newY = Math.sin(angle) * moveDistance;
-        
-        setCloseButtonPos({ x: newX, y: newY });
-      } else {
-        setCloseButtonPos({ x: 0, y: 0 });
-      }
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+      handleClose();
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    window.addEventListener("contextmenu", handleContextMenu);
+    
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("contextmenu", handleContextMenu);
+    };
   }, [isOpen]);
 
   const handleClose = () => {
-    setIsOpen(false);
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsOpen(false);
+      setIsClosing(false);
+    }, 300);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -69,26 +63,35 @@ const NewsletterPopup = () => {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/70 z-50 animate-fade-in"
+        className={`fixed inset-0 bg-black/70 z-50 transition-opacity duration-300 ${
+          isClosing ? "opacity-0" : "animate-fade-in"
+        }`}
         onClick={handleClose}
       />
 
-      {/* Close button that dodges cursor */}
-      <button
-        id="dodge-close-btn"
-        onClick={handleClose}
-        className="absolute top-4 right-4 z-[60] w-10 h-10 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center shadow-lg transition-all duration-200"
+      {/* Custom X cursor that follows mouse */}
+      <div
+        className="fixed z-[70] pointer-events-none"
         style={{
-          transform: `translate(${closeButtonPos.x}px, ${closeButtonPos.y}px)`,
+          left: `${cursorPos.x}px`,
+          top: `${cursorPos.y}px`,
+          transform: "translate(-50%, -50%)",
+          transition: "left 0.05s ease-out, top 0.05s ease-out",
         }}
       >
-        <X className="w-5 h-5" />
-      </button>
+        <div className="w-10 h-10 rounded-full bg-destructive flex items-center justify-center shadow-xl animate-pulse">
+          <X className="w-5 h-5 text-white" />
+        </div>
+      </div>
 
       {/* Newsletter Modal */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+      <div 
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none cursor-none"
+      >
         <div
-          className="relative bg-white rounded-3xl shadow-2xl max-w-4xl w-full overflow-hidden animate-scale-in pointer-events-auto"
+          className={`relative bg-white rounded-3xl shadow-2xl max-w-4xl w-full overflow-hidden pointer-events-auto transition-all duration-300 ${
+            isClosing ? "opacity-0 scale-95" : "animate-scale-in"
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
