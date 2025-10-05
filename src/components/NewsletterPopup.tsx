@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { X, Instagram, Send } from "lucide-react";
+import { X, Instagram, Send, Mail, Globe } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import newsletterImage from "@/assets/newsletter-person.png";
 
 const NewsletterPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [closeButtonPos, setCloseButtonPos] = useState({ x: 0, y: 0 });
   const [email, setEmail] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
 
@@ -23,7 +23,28 @@ const NewsletterPopup = () => {
     if (!isOpen) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      const closeBtn = document.getElementById('dodge-close-btn');
+      if (!closeBtn) return;
+
+      const btnRect = closeBtn.getBoundingClientRect();
+      const btnCenterX = btnRect.left + btnRect.width / 2;
+      const btnCenterY = btnRect.top + btnRect.height / 2;
+      
+      const distance = Math.sqrt(
+        Math.pow(e.clientX - btnCenterX, 2) + Math.pow(e.clientY - btnCenterY, 2)
+      );
+
+      // If mouse is within 100px, move button away
+      if (distance < 100) {
+        const angle = Math.atan2(btnCenterY - e.clientY, btnCenterX - e.clientX);
+        const moveDistance = 30;
+        const newX = Math.cos(angle) * moveDistance;
+        const newY = Math.sin(angle) * moveDistance;
+        
+        setCloseButtonPos({ x: newX, y: newY });
+      } else {
+        setCloseButtonPos({ x: 0, y: 0 });
+      }
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -52,14 +73,13 @@ const NewsletterPopup = () => {
         onClick={handleClose}
       />
 
-      {/* Close button that follows mouse */}
+      {/* Close button that dodges cursor */}
       <button
+        id="dodge-close-btn"
         onClick={handleClose}
-        className="fixed z-[60] w-10 h-10 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center shadow-lg transition-colors"
+        className="absolute top-4 right-4 z-[60] w-10 h-10 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center shadow-lg transition-all duration-200"
         style={{
-          left: `${mousePos.x - 20}px`,
-          top: `${mousePos.y - 20}px`,
-          pointerEvents: "none",
+          transform: `translate(${closeButtonPos.x}px, ${closeButtonPos.y}px)`,
         }}
       >
         <X className="w-5 h-5" />
@@ -85,15 +105,14 @@ const NewsletterPopup = () => {
               </h2>
 
               <p className="text-gray-600 text-lg">
-                Eu volutpat odio facilisis mauris sit amet massa vitae. Libero
-                nunc consequat interdum varius sit amet.
+                Stay updated with the latest news, insights, and updates from our platform.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="flex gap-2">
                   <Input
                     type="email"
-                    placeholder="Email Id"
+                    placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="flex-1 h-12 text-base"
@@ -119,23 +138,25 @@ const NewsletterPopup = () => {
                     htmlFor="terms"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    Terms and Conditions
+                    I agree to the Terms and Conditions
                   </label>
                 </div>
               </form>
 
               <div className="flex items-center gap-4">
-                <span className="font-semibold text-gray-900">We Are Social:</span>
+                <span className="font-semibold text-gray-900">Follow Us:</span>
                 <div className="flex gap-2">
                   <a
                     href="#"
                     className="w-10 h-10 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center transition-colors"
+                    aria-label="Instagram"
                   >
                     <Instagram className="w-5 h-5 text-gray-900" />
                   </a>
                   <a
                     href="#"
                     className="w-10 h-10 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center transition-colors"
+                    aria-label="X (Twitter)"
                   >
                     <svg className="w-5 h-5 text-gray-900" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -144,16 +165,16 @@ const NewsletterPopup = () => {
                   <a
                     href="#"
                     className="w-10 h-10 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center transition-colors"
+                    aria-label="Email"
                   >
-                    <span className="text-gray-900 font-bold text-sm">@</span>
+                    <Mail className="w-5 h-5 text-gray-900" />
                   </a>
                   <a
                     href="#"
                     className="w-10 h-10 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center transition-colors"
+                    aria-label="Website"
                   >
-                    <svg className="w-5 h-5 text-gray-900" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10c0-5.523-4.477-10-10-10zm5 9h-4V7h-2v4H7v2h4v4h2v-4h4v-2z" />
-                    </svg>
+                    <Globe className="w-5 h-5 text-gray-900" />
                   </a>
                 </div>
               </div>
