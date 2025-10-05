@@ -61,9 +61,9 @@ const NewsletterPopup = () => {
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop with hidden cursor */}
       <div
-        className={`fixed inset-0 bg-black/70 z-50 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/70 z-50 transition-opacity duration-300 cursor-none ${
           isClosing ? "opacity-0" : "animate-fade-in"
         }`}
         onClick={handleClose}
@@ -89,7 +89,7 @@ const NewsletterPopup = () => {
         className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none cursor-none"
       >
         <div
-          className={`relative bg-white rounded-3xl shadow-2xl max-w-4xl w-full overflow-hidden pointer-events-auto transition-all duration-300 ${
+          className={`relative bg-white rounded-3xl shadow-2xl max-w-4xl w-full overflow-hidden pointer-events-auto cursor-auto transition-all duration-300 ${
             isClosing ? "opacity-0 scale-95" : "animate-scale-in"
           }`}
           onClick={(e) => e.stopPropagation()}
