@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useState, useRef } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useState, useRef, MouseEvent } from "react";
 
 interface CourseCardProps {
   title: string;
@@ -21,101 +22,153 @@ const CourseCard = ({
   image,
   colorScheme 
 }: CourseCardProps) => {
-  const [direction, setDirection] = useState({ x: 0, y: 0 });
+  const [isFlipped, setIsFlipped] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
+  // Motion values for 3D tilt effect
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Smooth spring animations
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), {
+    stiffness: 150,
+    damping: 20
+  });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), {
+    stiffness: 150,
+    damping: 20
+  });
+
   const colorClasses = {
-    primary: 'bg-primary',
-    secondary: 'bg-secondary',
-    accent: 'bg-accent',
-    orange: 'bg-orange-500'
+    primary: 'from-primary to-primary/90',
+    secondary: 'from-secondary to-secondary/90',
+    accent: 'from-accent to-accent/90',
+    orange: 'from-orange-500 to-orange-600'
   };
 
-  const bgClass = colorClasses[colorScheme];
+  const bgGradient = colorClasses[colorScheme];
 
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
-    
+
     const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    
-    setDirection({
-      x: x - centerX,
-      y: y - centerY
-    });
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const x = (e.clientX - centerX) / (rect.width / 2);
+    const y = (e.clientY - centerY) / (rect.height / 2);
+
+    mouseX.set(x);
+    mouseY.set(y);
   };
 
-  const getTransformClass = () => {
-    const absX = Math.abs(direction.x);
-    const absY = Math.abs(direction.y);
-    
-    if (absX > absY) {
-      return direction.x > 0 
-        ? 'translate-x-8' 
-        : '-translate-x-8';
-    } else {
-      return direction.y > 0 
-        ? 'translate-y-8' 
-        : '-translate-y-8';
-    }
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+    setIsFlipped(false);
   };
-
-  const transformClass = getTransformClass();
 
   return (
-    <Card 
+    <div
       ref={cardRef}
-      onMouseEnter={handleMouseEnter}
-      className="group relative overflow-hidden rounded-lg border-none shadow-lg h-[400px] cursor-pointer transition-all duration-500 ease-out hover:shadow-2xl"
+      className="perspective-1000 h-[400px]"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setIsFlipped(true)}
     >
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out group-hover:scale-110 group-hover:brightness-75"
-        style={{ backgroundImage: `url(${image})` }}
-      />
-      
-      {/* Colored Overlay with Title */}
-      <div className={`absolute inset-x-0 bottom-0 ${bgClass} p-6 transition-all duration-500 ease-in-out group-hover:inset-0 group-hover:bg-opacity-95`}>
-        <div className="relative h-full flex flex-col justify-between">
-          {/* Title - Always visible */}
-          <h3 className="text-2xl font-bold text-white leading-tight transition-all duration-500 ease-out group-hover:scale-105">
-            {title}
-          </h3>
-          
-          {/* Details - Visible on hover */}
-          <div className={`opacity-0 group-hover:opacity-100 transition-all duration-500 delay-150 ease-out space-y-4 transform ${transformClass} group-hover:translate-x-0 group-hover:translate-y-0`}>
-            <p className="text-white/90 text-sm">
-              {description}
-            </p>
+      <motion.div
+        className="relative w-full h-full"
+        style={{
+          transformStyle: "preserve-3d",
+          rotateX,
+          rotateY,
+        }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      >
+        {/* Front Side */}
+        <motion.div
+          className="absolute inset-0 backface-hidden"
+          animate={{ rotateY: isFlipped ? 180 : 0 }}
+          transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          <Card className="relative overflow-hidden rounded-2xl border-none shadow-2xl h-full group">
+            <div 
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+              style={{ backgroundImage: `url(${image})` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             
-            <div className="space-y-2">
-              <p className="text-white font-semibold text-lg">{category}</p>
-              <p className="text-white/80 text-sm">Start date: {startDate}</p>
-              <p className="text-white text-3xl font-bold">{price}</p>
+            <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+              <div className="inline-block px-3 py-1 mb-3 text-xs font-semibold bg-white/20 backdrop-blur-sm rounded-full">
+                {category}
+              </div>
+              <h3 className="text-2xl font-bold leading-tight mb-2">
+                {title}
+              </h3>
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-white/80">Start: {startDate}</p>
+                <p className="text-2xl font-bold">{price}</p>
+              </div>
             </div>
+          </Card>
+        </motion.div>
+
+        {/* Back Side */}
+        <motion.div
+          className="absolute inset-0 backface-hidden"
+          animate={{ rotateY: isFlipped ? 0 : -180 }}
+          transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+          style={{ 
+            backfaceVisibility: "hidden",
+            transform: "rotateY(180deg)"
+          }}
+        >
+          <Card className={`relative overflow-hidden rounded-2xl border-none shadow-2xl h-full bg-gradient-to-br ${bgGradient}`}>
+            <div className="absolute inset-0 backdrop-blur-3xl bg-white/10" />
             
-            <div className={`flex gap-3 pt-4 transform ${transformClass} opacity-0 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-200 ease-out`}>
-              <Button 
-                variant="secondary" 
-                className="bg-white text-orange-600 hover:bg-white/90 font-semibold transition-all duration-300 hover:scale-105"
-              >
-                LEARN MORE
-              </Button>
-              <Button 
-                variant="secondary"
-                className="bg-white text-orange-600 hover:bg-white/90 font-semibold transition-all duration-300 hover:scale-105"
-              >
-                BUY NOW
-              </Button>
+            <div className="relative h-full flex flex-col justify-between p-6 text-white">
+              <div>
+                <div className="inline-block px-3 py-1 mb-4 text-xs font-semibold bg-white/30 backdrop-blur-sm rounded-full">
+                  {category}
+                </div>
+                <h3 className="text-2xl font-bold leading-tight mb-4">
+                  {title}
+                </h3>
+                <p className="text-white/90 text-sm mb-4 leading-relaxed">
+                  {description}
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-white/80">Start date:</span>
+                  <span className="font-semibold">{startDate}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-3xl font-bold">{price}</span>
+                </div>
+                
+                <div className="flex gap-3 pt-2">
+                  <Button 
+                    variant="secondary" 
+                    className="flex-1 bg-white text-gray-900 hover:bg-white/90 font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
+                  >
+                    LEARN MORE
+                  </Button>
+                  <Button 
+                    variant="secondary"
+                    className="flex-1 bg-white/20 text-white border-2 border-white hover:bg-white hover:text-gray-900 font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+                  >
+                    BUY NOW
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </Card>
+          </Card>
+        </motion.div>
+      </motion.div>
+    </div>
   );
 };
 
