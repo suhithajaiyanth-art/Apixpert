@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useState, useRef } from "react";
 
 interface CourseCardProps {
   title: string;
@@ -20,6 +21,9 @@ const CourseCard = ({
   image,
   colorScheme 
 }: CourseCardProps) => {
+  const [direction, setDirection] = useState({ x: 0, y: 0 });
+  const cardRef = useRef<HTMLDivElement>(null);
+
   const colorClasses = {
     primary: 'bg-primary',
     secondary: 'bg-secondary',
@@ -29,8 +33,45 @@ const CourseCard = ({
 
   const bgClass = colorClasses[colorScheme];
 
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    setDirection({
+      x: x - centerX,
+      y: y - centerY
+    });
+  };
+
+  const getTransformClass = () => {
+    const absX = Math.abs(direction.x);
+    const absY = Math.abs(direction.y);
+    
+    if (absX > absY) {
+      return direction.x > 0 
+        ? 'translate-x-8' 
+        : '-translate-x-8';
+    } else {
+      return direction.y > 0 
+        ? 'translate-y-8' 
+        : '-translate-y-8';
+    }
+  };
+
+  const transformClass = getTransformClass();
+
   return (
-    <Card className="group relative overflow-hidden rounded-lg border-none shadow-lg h-[400px] cursor-pointer transition-all duration-500 ease-out hover:shadow-2xl">
+    <Card 
+      ref={cardRef}
+      onMouseEnter={handleMouseEnter}
+      className="group relative overflow-hidden rounded-lg border-none shadow-lg h-[400px] cursor-pointer transition-all duration-500 ease-out hover:shadow-2xl"
+    >
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out group-hover:scale-110 group-hover:brightness-75"
@@ -46,7 +87,7 @@ const CourseCard = ({
           </h3>
           
           {/* Details - Visible on hover */}
-          <div className="opacity-0 group-hover:opacity-100 transition-all duration-500 delay-150 ease-out space-y-4 transform translate-y-4 group-hover:translate-y-0">
+          <div className={`opacity-0 group-hover:opacity-100 transition-all duration-500 delay-150 ease-out space-y-4 transform ${transformClass} group-hover:translate-x-0 group-hover:translate-y-0`}>
             <p className="text-white/90 text-sm">
               {description}
             </p>
@@ -57,7 +98,7 @@ const CourseCard = ({
               <p className="text-white text-3xl font-bold">{price}</p>
             </div>
             
-            <div className="flex gap-3 pt-4 transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-200 ease-out">
+            <div className={`flex gap-3 pt-4 transform ${transformClass} opacity-0 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-200 ease-out`}>
               <Button 
                 variant="secondary" 
                 className="bg-white text-orange-600 hover:bg-white/90 font-semibold transition-all duration-300 hover:scale-105"
