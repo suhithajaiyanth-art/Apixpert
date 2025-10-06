@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import TechBanner from "@/components/TechBanner";
 import ExpertiseSection from "@/components/ExpertiseSection";
+import EMIOffersSection from "@/components/EMIOffersSection";
 import NewsletterPopup from "@/components/NewsletterPopup";
 
 const Index = () => {
@@ -11,6 +12,7 @@ const Index = () => {
       <Hero />
       <TechBanner />
       <ExpertiseSection />
+      <EMIOffersSection />
       <NewsletterPopup />
     </div>
   );
