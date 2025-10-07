@@ -47,47 +47,53 @@ const GetInTouchSection = () => {
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent" />
             </div>
 
-            {/* Rotating Badge */}
+            {/* Rotating Badge with Circular Text */}
             <motion.div 
-              className="absolute -top-8 -left-8 w-32 h-32 md:w-40 md:h-40"
+              className="absolute -top-8 -left-8 w-36 h-36 md:w-44 md:h-44 drop-shadow-2xl"
               style={{ rotate }}
             >
-              <div className="relative w-full h-full">
-                {/* Gear/Cog Shape */}
-                <svg viewBox="0 0 200 200" className="w-full h-full">
-                  <defs>
-                    <linearGradient id="gearGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="hsl(var(--primary))" />
-                      <stop offset="100%" stopColor="hsl(var(--accent))" />
-                    </linearGradient>
-                  </defs>
-                  {/* Gear teeth */}
+              <svg viewBox="0 0 200 200" className="w-full h-full">
+                <defs>
+                  {/* Path for circular text */}
                   <path
-                    d="M100,20 L110,35 L120,20 L125,40 L135,30 L135,50 L150,45 L145,65 L160,65 L150,80 L165,90 L145,95 L150,110 L135,110 L135,125 L125,115 L120,135 L110,120 L100,135 L90,120 L85,135 L75,115 L65,125 L65,110 L50,110 L55,95 L35,90 L50,80 L40,65 L55,65 L50,45 L65,50 L65,30 L75,40 L80,20 L90,35 Z"
-                    fill="url(#gearGradient)"
-                    stroke="hsl(var(--background))"
-                    strokeWidth="3"
+                    id="circlePath"
+                    d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0"
+                    fill="none"
                   />
-                  {/* Center circle */}
-                  <circle cx="100" cy="100" r="45" fill="hsl(var(--background))" />
-                </svg>
-
-                {/* Centered Text - Counter-rotates to stay readable */}
-                <motion.div 
-                  className="absolute inset-0 flex items-center justify-center"
-                  style={{ rotate: useTransform(rotate, (r) => -r) }}
-                >
-                  <div className="text-center px-2">
-                    <p className="text-[10px] md:text-xs font-bold text-foreground leading-tight">
-                      Need Help?
-                    </p>
-                    <Phone className="w-4 h-4 md:w-5 md:h-5 mx-auto my-1 text-primary" />
-                    <p className="text-[8px] md:text-[10px] font-semibold text-muted-foreground leading-tight">
-                      Book a free<br/>consultation
-                    </p>
-                  </div>
-                </motion.div>
-              </div>
+                  <linearGradient id="gearGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="hsl(var(--primary))" />
+                    <stop offset="100%" stopColor="hsl(var(--accent))" />
+                  </linearGradient>
+                </defs>
+                
+                {/* Gear teeth - black background */}
+                <path
+                  d="M100,15 L107,30 L114,15 L118,32 L126,24 L128,42 L138,36 L138,54 L148,50 L146,68 L156,66 L152,84 L162,84 L156,100 L162,116 L152,116 L156,134 L146,132 L148,150 L138,146 L138,164 L128,158 L126,176 L118,168 L114,185 L107,170 L100,185 L93,170 L86,185 L82,168 L74,176 L72,158 L62,164 L62,146 L52,150 L54,132 L44,134 L48,116 L38,116 L44,100 L38,84 L48,84 L44,66 L54,68 L52,50 L62,54 L62,36 L72,42 L74,24 L82,32 L86,15 L93,30 Z"
+                  fill="#000000"
+                  stroke="none"
+                />
+                
+                {/* Inner white circle */}
+                <circle cx="100" cy="100" r="52" fill="#ffffff" />
+                
+                {/* Circular text */}
+                <text className="text-[11px] font-bold fill-white uppercase tracking-wider" style={{ fontFamily: 'sans-serif' }}>
+                  <textPath href="#circlePath" startOffset="12%">
+                    Need Help ? • Book a free Consultation
+                  </textPath>
+                </text>
+                
+                {/* Center icon - calendar with checkmark */}
+                <g transform="translate(100, 100)">
+                  {/* Calendar icon */}
+                  <rect x="-12" y="-10" width="24" height="20" rx="2" fill="none" stroke="hsl(var(--primary))" strokeWidth="2"/>
+                  <line x1="-8" y1="-10" x2="-8" y2="-14" stroke="hsl(var(--primary))" strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="8" y1="-10" x2="8" y2="-14" stroke="hsl(var(--primary))" strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="-12" y1="-4" x2="12" y2="-4" stroke="hsl(var(--primary))" strokeWidth="2"/>
+                  {/* Checkmark */}
+                  <polyline points="-4,0 -1,4 6,-4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </g>
+              </svg>
             </motion.div>
           </motion.div>
 
