@@ -33,14 +33,15 @@ const TrialCourseSection = () => {
                 drag="y"
                 dragConstraints={{ top: -100, bottom: 100 }}
                 dragElastic={0.1}
-                initial={{ y: -200, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
+                initial={{ y: -300, opacity: 0, rotate: -10 }}
+                animate={{ y: 0, opacity: 1, rotate: 0 }}
                 transition={{
-                  delay: index * 0.2,
-                  duration: 0.8,
+                  delay: index * 0.15,
+                  duration: 1.2,
                   type: "spring",
-                  stiffness: 100,
-                  damping: 15,
+                  stiffness: 80,
+                  damping: 10,
+                  bounce: 0.6,
                 }}
                 whileHover={{ scale: 1.05 }}
                 whileDrag={{ scale: 1.1, cursor: "grabbing" }}
