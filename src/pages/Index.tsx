@@ -5,6 +5,7 @@ import ExpertiseSection from "@/components/ExpertiseSection";
 import GetInTouchSection from "@/components/GetInTouchSection";
 import TrialCourseSection from "@/components/TrialCourseSection";
 import EMIOffersSection from "@/components/EMIOffersSection";
+import AITrainingSection from "@/components/AITrainingSection";
 import NewsletterPopup from "@/components/NewsletterPopup";
 
 const Index = () => {
@@ -17,6 +18,7 @@ const Index = () => {
       <GetInTouchSection />
       <TrialCourseSection />
       <EMIOffersSection />
+      <AITrainingSection />
       <NewsletterPopup />
     </div>
   );
