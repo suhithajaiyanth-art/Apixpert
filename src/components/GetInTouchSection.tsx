@@ -1,23 +1,10 @@
-import { useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { CheckCircle2, Phone } from "lucide-react";
 import { Button } from "./ui/button";
 import consultationImage from "@/assets/consultation-image.jpg";
 import rotatingBadge from "@/assets/rotating-badge.png";
 
 const GetInTouchSection = () => {
-  const { scrollY } = useScroll();
-  const [scrollProgress, setScrollProgress] = useState(0);
-  
-  // Convert scroll position to rotation (rotates continuously as you scroll)
-  const rotate = useTransform(scrollY, [0, 1000], [0, 360]);
-
-  useEffect(() => {
-    const unsubscribe = scrollY.on("change", (latest) => {
-      setScrollProgress(latest);
-    });
-    return () => unsubscribe();
-  }, [scrollY]);
 
   const benefits = [
     "Clear your doubts",
@@ -49,17 +36,14 @@ const GetInTouchSection = () => {
             </div>
 
             {/* Rotating Badge */}
-            <motion.div 
-              className="absolute -top-8 -left-8 w-36 h-36 md:w-44 md:h-44 drop-shadow-2xl"
-              style={{ rotate }}
-            >
+            <div className="absolute -top-8 -left-8 w-36 h-36 md:w-44 md:h-44 drop-shadow-2xl">
               <img 
                 src={rotatingBadge} 
                 alt="Need Help? Book a Free Consultation"
-                className="w-full h-full"
+                className="w-full h-full animate-rotate-slow"
                 loading="lazy"
               />
-            </motion.div>
+            </div>
           </motion.div>
 
           {/* Right Side - Content */}

@@ -103,4 +103,21 @@ All colors MUST be HSL.
   .preserve-3d {
     transform-style: preserve-3d;
   }
+
+  @keyframes rotate-infinite {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-rotate-slow {
+    animation: rotate-infinite 12s linear infinite;
+  }
+
+  .animate-rotate-slow:hover {
+    animation-play-state: paused;
+  }
 }
