@@ -1,83 +1,24 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
-import geometricImage from "@/assets/geometric-illustration.png";
+import ThrowableElements from "./ThrowableElements";
 
 const TrialCourseSection = () => {
-  const technologies = [
-    { name: "AutoCAD", top: "15%", left: "5%" },
-    { name: "NX Open", top: "55%", left: "10%" },
-    { name: "SolidWorks API", top: "60%", left: "50%" },
-    { name: "CATIA Automation", top: "10%", left: "45%" },
-    { name: "Customization", top: "35%", left: "35%" },
+  const tags = [
+    "SolidWorks API",
+    "NX Open",
+    "CATIA Automation",
+    "AutoCAD",
+    "Customization",
   ];
 
   return (
     <section className="py-16 px-4 md:py-24 bg-black">
       <div className="container mx-auto max-w-7xl">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Illustration with Draggable Cards */}
+          {/* Left Column - Throwable Interactive Elements */}
           <div className="relative h-[500px] md:h-[600px]">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <img
-                src={geometricImage}
-                alt="CAD automation illustration"
-                className="w-3/4 h-auto object-contain"
-              />
-            </div>
-
-            {/* Draggable Technology Cards */}
-            {technologies.map((tech, index) => (
-              <motion.div
-                key={tech.name}
-                drag="y"
-                dragConstraints={{ top: -100, bottom: 100 }}
-                dragElastic={0.1}
-                initial={{ y: -300, opacity: 0, rotate: -10 }}
-                animate={{ y: 0, opacity: 1, rotate: 0 }}
-                transition={{
-                  delay: index * 0.15,
-                  duration: 1.2,
-                  type: "spring",
-                  stiffness: 80,
-                  damping: 10,
-                  bounce: 0.6,
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileDrag={{ scale: 1.1, cursor: "grabbing" }}
-                className="absolute cursor-grab"
-                style={{ top: tech.top, left: tech.left }}
-              >
-                <div className="bg-white rounded-full px-6 py-3 shadow-lg">
-                  <span className="font-bold text-black whitespace-nowrap text-sm md:text-base">
-                    {tech.name}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-
-            {/* Decorative Stars */}
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="absolute top-10 right-10 text-amber-500 text-2xl"
-            >
-              ✦
-            </motion.div>
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-              className="absolute bottom-20 right-20 text-amber-500 text-xl"
-            >
-              ✦
-            </motion.div>
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-              className="absolute top-32 left-16 text-amber-500 text-lg"
-            >
-              ✦
-            </motion.div>
+            <ThrowableElements tags={tags} />
           </div>
 
           {/* Right Column - Content */}
