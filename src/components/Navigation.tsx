@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import LogoImg from "@/assets/Blank Studios_black.png";
 
 const Navigation = () => {
   const navItems = [
@@ -16,12 +17,12 @@ const Navigation = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold tracking-wider">
-              <span className="text-white">API</span>
-              <span className="text-primary">X</span>
-              <span className="text-white">PERT</span>
-            </div>
+          <Link to="/" className="flex items-center">
+            <img
+              src={LogoImg}
+              alt="Blank Studios"
+              className="h-8 w-auto object-contain"
+            />
           </Link>
 
           {/* Nav Links */}
