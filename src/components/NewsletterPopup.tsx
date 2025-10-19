@@ -12,12 +12,15 @@ const NewsletterPopup = () => {
   const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
-    // Show popup after a brief delay
-    const timer = setTimeout(() => {
-      setIsOpen(true);
-    }, 500);
-
-    return () => clearTimeout(timer);
+    // Only show popup if not already shown in this browser
+    const hasShown = localStorage.getItem("newsletter_popup_shown");
+    if (!hasShown) {
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+        localStorage.setItem("newsletter_popup_shown", "true");
+      }, 500);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   useEffect(() => {
@@ -123,9 +126,9 @@ const NewsletterPopup = () => {
                   />
                   <button
                     type="submit"
-                    className="w-12 h-12 bg-yellow-400 hover:bg-yellow-500 rounded-lg flex items-center justify-center transition-colors"
+                    className="w-12 h-12 bg-gradient-to-br from-primary to-blue-600 hover:from-blue-700 hover:to-primary rounded-lg flex items-center justify-center transition-all shadow-lg border border-white/10"
                   >
-                    <Send className="w-5 h-5 text-gray-900" />
+                    <Send className="w-5 h-5 text-white" />
                   </button>
                 </div>
 
@@ -147,37 +150,37 @@ const NewsletterPopup = () => {
               </form>
 
               <div className="flex items-center gap-4">
-                <span className="font-semibold text-gray-900">Follow Us:</span>
+                <span className="font-semibold text-primary">Follow Us:</span>
                 <div className="flex gap-2">
                   <a
                     href="#"
-                    className="w-10 h-10 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center transition-colors"
+                    className="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 hover:from-blue-700 hover:to-primary rounded-full flex items-center justify-center transition-all shadow-lg border border-white/10"
                     aria-label="Instagram"
                   >
-                    <Instagram className="w-5 h-5 text-gray-900" />
+                    <Instagram className="w-5 h-5 text-white" />
                   </a>
                   <a
                     href="#"
-                    className="w-10 h-10 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center transition-colors"
+                    className="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 hover:from-blue-700 hover:to-primary rounded-full flex items-center justify-center transition-all shadow-lg border border-white/10"
                     aria-label="X (Twitter)"
                   >
-                    <svg className="w-5 h-5 text-gray-900" viewBox="0 0 24 24" fill="currentColor">
+                    <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
                   </a>
                   <a
                     href="#"
-                    className="w-10 h-10 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center transition-colors"
+                    className="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 hover:from-blue-700 hover:to-primary rounded-full flex items-center justify-center transition-all shadow-lg border border-white/10"
                     aria-label="Email"
                   >
-                    <Mail className="w-5 h-5 text-gray-900" />
+                    <Mail className="w-5 h-5 text-white" />
                   </a>
                   <a
                     href="#"
-                    className="w-10 h-10 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center transition-colors"
+                    className="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 hover:from-blue-700 hover:to-primary rounded-full flex items-center justify-center transition-all shadow-lg border border-white/10"
                     aria-label="Website"
                   >
-                    <Globe className="w-5 h-5 text-gray-900" />
+                    <Globe className="w-5 h-5 text-white" />
                   </a>
                 </div>
               </div>

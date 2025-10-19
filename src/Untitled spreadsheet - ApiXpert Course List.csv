@@ -1,0 +1,41 @@
+S.No,Type,Course Name,Actual Price (GST Exc.),GST,Actual Price (GST Inc.),Offer Price (GST Exc.),GST,Offer Price (GST Inc.),Bundle Offer (GST Exc.),GST,Bundle Offer (GST Inc.)
+1,Single,C# for Automation (Live),40000,7200,47200,20000,3600,23600,,0,0
+2,Single,C# for Automation (Recorded with Live Support),20000,3600,23600,10000,1800,11800,7000,1260,8260
+3,Single,VBA/Vb.net for Automation (Live),30000,5400,35400,15000,2700,17700,,0,0
+4,,Python for Automaiton (Live),30000,5400,35400,15000,2700,17700,,0,0
+,,SolidWorks Design (Basic),20000,3600,23600,10000,1800,11800,7000,1260,8260
+5,Single,SolidWorks Design (Advanced),60000,10800,70800,30000,5400,35400,25000,4500,29500
+6,Single,SolidWorks  API Automation / Customization (Live),70000,12600,82600,35000,6300,41300,,0,0
+7,,SolidWorks  API Automation / Customization (Recorded with Live Support),50000,9000,59000,25000,4500,29500,23000,4140,27140
+8,Bundle Offer,SolidWorks API Automation (Live) + C# for Automation (Live),110000,19800,129800,55000,9900,64900,40000,7200,47200
+9,,SolidWorks API Automation (Recorded) + C# for Automation (Recorded),70000,12600,82600,35000,6300,41300,30000,5400,35400
+11,,SolidWorks API Automation (Rec) + C# for Automation  (Rec) + SolidWorks Design (Basic- Live),90000,16200,106200,45000,8100,53100,37000,6660,43660
+,,SolidWorks API Automation (Rec) + C# for Automation  (Rec) + SolidWorks Design (Advanced- Live),130000,23400,153400,65000,11700,76700,55000,9900,64900
+,,SolidWorks API Automation (Live) + C# for Automation  (Live) + SolidWorks Design (Basic- Live),130000,23400,153400,65000,11700,76700,47000,8460,55460
+,,SolidWorks API Automation (Live) + C# for Automation  (Live) + SolidWorks Design (Advanced- Live),170000,30600,200600,85000,15300,100300,65000,11700,76700
+12,Single,UG NX Design (Advanced),60000,10800,70800,30000,5400,35400,25000,4500,29500
+,Single,UG NX Design (Basic),20000,3600,23600,10000,1800,11800,7000,1260,8260
+13,Single,NX Open API Automation / Customization (Live),70000,12600,82600,35000,6300,41300,,0,0
+,Bundle Offer,NX Open API Automation (Live) + C# for Automation (Live),110000,19800,129800,55000,9900,64900,40000,7200,47200
+14,,NX Open API Automation (Live) + C# for Automation (Rec.),90000,16200,106200,45000,8100,53100,35000,6300,41300
+15,,NX Open API Automation (Live) + C# for Automation (Live) + UG NX Design (Advanced),170000,30600,200600,85000,15300,100300,65000,11700,76700
+,,NX Open API Automation (Live) + C# for Automation (Rec.) + UG NX Design (Advanced),150000,27000,177000,75000,13500,88500,60000,10800,70800
+,,NX Open API Automation (Live) + C# for Automation (Live) + UG NX Design (Basic),130000,23400,153400,65000,11700,76700,47000,8460,55460
+16,,NX Open API Automation (Live) + C# for Automation (Rec.) + UG NX Design (Basic),110000,19800,129800,55000,9900,64900,42000,7560,49560
+17,Single,CATIA Design (Advanced),60000,10800,70800,30000,5400,35400,25000,4500,29500
+,,CATIA Design (Basic),20000,3600,23600,10000,1800,11800,7000,1260,8260
+18,Single,CATIA API Automation / Customization (Live),70000,12600,82600,35000,6300,41300,,0,0
+19,Bundle Offer,CATIA Automation + VBA/Vb.net for Automation,100000,18000,118000,50000,9000,59000,40000,7200,47200
+20,,CATIA Automation +  VBA/Vb.net for Automation + CATIA  Design (Advanced),160000,28800,188800,80000,14400,94400,65000,11700,76700
+21,,CATIA Automation +  VBA/Vb.net for Automation + CATIA  Design (Basic),120000,21600,141600,60000,10800,70800,47000,8460,55460
+27,Single,AutoCAD Inventor API Automation / Customization,70000,12600,82600,35000,6300,41300,,,
+28,Single,CREO API Automation / Customization,70000,12600,82600,35000,6300,41300,,,
+22,Single,AutoCAD Design (Advanced),60000,10800,70800,30000,5400,35400,25000,4500,29500
+,Single,AutoCAD Design (Basic),20000,3600,23600,10000,1800,11800,7000,1260,8260
+23,Single,AutoCAD API Automation / Customization (Live),70000,12600,82600,35000,6300,41300,,0,0
+24,Bundle Offer,AutoCAD  API Automation + C# for Automation,110000,19800,129800,55000,9900,64900,40000,7200,47200
+25,,AutoCAD API Automation + C# for Automation + AutoCAD Design (Advanced),170000,30600,200600,70000,12600,82600,0,0,0
+26,,AutoCAD API Automation + C# for Automation + AutoCAD Design (Basic),130000,23400,153400,65000,11700,76700,47000,8460,55460
+,,,,,,,,,,0,0
+,,,,,,,,,,0,0
+,,,,,,,,,,0,0

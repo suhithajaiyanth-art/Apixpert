@@ -1,3 +1,4 @@
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -16,7 +17,8 @@ const NotFound = () => {
         <a href="/" className="text-blue-500 underline hover:text-blue-700">
           Return to Home
         </a>
-      </div>
+  </div>
+  <ScrollToTopButton />
     </div>
   );
 };

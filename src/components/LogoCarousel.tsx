@@ -41,35 +41,46 @@ const LogoCarousel = () => {
       }}
     >
       <div className="absolute inset-x-0 bottom-0 z-20">
-        <div className="w-full overflow-hidden" style={{background: "linear-gradient(to right, #2563eb 0%, #1e40af 100%)", padding: '1.5rem 0'}}>
-          {/* Fade edges using mask gradient */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-16 md:w-32 z-10" style={{background: "linear-gradient(to right, #2563eb 70%, transparent)"}} />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 md:w-32 z-10" style={{background: "linear-gradient(to left, #1e40af 70%, transparent)"}} />
+        <div className="w-full flex justify-center overflow-hidden" style={{background: "linear-gradient(to right, #2563eb 0%, #1e40af 100%)", padding: '0.75rem 0'}}>
           <div
-            ref={marqueeRef}
-            className="flex items-center gap-4 md:gap-8 marquee-motion group w-[200%] min-w-max"
-            tabIndex={0}
-            role="list"
-            aria-label="Scrolling technology logos"
-            onMouseEnter={() => { marqueeRef.current && (marqueeRef.current.style.animationPlayState = 'paused'); }}
-            onMouseLeave={() => { marqueeRef.current && (marqueeRef.current.style.animationPlayState = 'running'); }}
+            className="relative w-full max-w-[1200px] mx-auto"
+            style={{
+              WebkitMaskImage:
+                'linear-gradient(to right, transparent 0px, black 48px, black calc(100% - 48px), transparent 100%)',
+              maskImage:
+                'linear-gradient(to right, transparent 0px, black 48px, black calc(100% - 48px), transparent 100%)',
+              WebkitMaskRepeat: 'no-repeat',
+              maskRepeat: 'no-repeat',
+              WebkitMaskSize: '100% 100%',
+              maskSize: '100% 100%',
+            }}
           >
-            {duplicatedLogos.map((logo, index) => (
-              <div
-                key={`${logo.alt}-${index}`}
-                className="flex-shrink-0 w-20 h-20 md:w-32 md:h-32 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-80 hover:opacity-100 focus:outline focus:outline-2 focus:outline-primary"
-                role="listitem"
-                tabIndex={-1}
-                aria-hidden={index >= logoData.length}
-              >
-                <img
-                  src={logo.src}
-                  alt={logo.alt}
-                  className="max-w-full max-h-full object-contain"
-                  loading="lazy"
-                />
-              </div>
-            ))}
+            <div
+              ref={marqueeRef}
+              className="flex items-center gap-4 md:gap-8 marquee-motion group w-[200%] min-w-max"
+              tabIndex={0}
+              role="list"
+              aria-label="Scrolling technology logos"
+              onMouseEnter={() => { marqueeRef.current && (marqueeRef.current.style.animationPlayState = 'paused'); }}
+              onMouseLeave={() => { marqueeRef.current && (marqueeRef.current.style.animationPlayState = 'running'); }}
+            >
+              {duplicatedLogos.map((logo, index) => (
+                <div
+                  key={`${logo.alt}-${index}`}
+                  className="flex-shrink-0 w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-80 hover:opacity-100 focus:outline focus:outline-2 focus:outline-primary"
+                  role="listitem"
+                  tabIndex={-1}
+                  aria-hidden={index >= logoData.length}
+                >
+                  <img
+                    src={logo.src}
+                    alt={logo.alt}
+                    className="max-w-full max-h-full object-contain"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

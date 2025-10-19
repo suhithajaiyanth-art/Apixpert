@@ -3,6 +3,12 @@ import { Card } from "@/components/ui/card";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useState, useRef, MouseEvent } from "react";
 
+interface PriceDetail {
+  label: string;
+  value: string;
+  highlight?: boolean;
+}
+
 interface CourseCardProps {
   title: string;
   description: string;
@@ -11,8 +17,8 @@ interface CourseCardProps {
   price: string;
   image: string;
   colorScheme: 'primary' | 'secondary' | 'accent' | 'orange';
+  priceDetails?: PriceDetail[];
 }
-
 const CourseCard = ({ 
   title, 
   description, 
@@ -20,7 +26,8 @@ const CourseCard = ({
   startDate, 
   price,
   image,
-  colorScheme 
+  colorScheme,
+  priceDetails = []
 }: CourseCardProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -47,6 +54,7 @@ const CourseCard = ({
   };
 
   const bgGradient = colorClasses[colorScheme];
+  const dynamicHeight = priceDetails.length >= 3 ? 560 : priceDetails.length === 2 ? 520 : 480;
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -71,7 +79,8 @@ const CourseCard = ({
   return (
     <div
       ref={cardRef}
-      className="perspective-1000 h-[400px]"
+      className="perspective-1000"
+      style={{ height: dynamicHeight }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={() => setIsFlipped(true)}
@@ -107,9 +116,10 @@ const CourseCard = ({
                 {title}
               </h3>
               <div className="flex items-center justify-between">
-                <p className="text-sm text-white/80">Start: {startDate}</p>
+                <p className="text-sm text-white/80">Delivery: {startDate}</p>
                 <p className="text-2xl font-bold">{price}</p>
               </div>
+              <p className="mt-2 text-[11px] uppercase tracking-[0.25em] text-white/70">GST INCLUDED</p>
             </div>
           </Card>
         </motion.div>
@@ -142,13 +152,26 @@ const CourseCard = ({
 
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-white/80">Start date:</span>
+                  <span className="text-white/80">Delivery mode</span>
                   <span className="font-semibold">{startDate}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-3xl font-bold">{price}</span>
                 </div>
-                
+                {priceDetails.length > 0 && (
+                  <div className="space-y-2 pt-2">
+                    {priceDetails.map((detail, index) => (
+                      <div
+                        key={`${detail.label}-${index}`}
+                        className={`flex items-center justify-between rounded-xl border border-white/15 px-3 py-2 text-sm ${detail.highlight ? "bg-white/25 text-white" : "bg-black/20 text-white/85"}`}
+                      >
+                        <span>{detail.label}</span>
+                        <span className="font-semibold text-white">{detail.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <div className="flex gap-3 pt-2">
                   <Button 
                     variant="secondary" 

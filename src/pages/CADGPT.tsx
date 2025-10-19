@@ -1,10 +1,12 @@
 import Navigation from "@/components/Navigation";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload, Send, FileArchive } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Footer from "@/components/Footer";
 
 interface Message {
   id: string;
@@ -141,6 +143,7 @@ const CADGPT = () => {
                 >
                   Remove
                 </Button>
+            <ScrollToTopButton />
               </div>
             )}
 
@@ -187,9 +190,20 @@ const CADGPT = () => {
             <p className="text-xs text-muted-foreground mt-3 text-center">
               Upload ZIP files containing SolidWorks API code, NX Open scripts, or CAD automation files
             </p>
+            <div className="flex justify-center mt-4">
+              <a
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=sales@apixpert.com&su=CAD%20GPT%20Code%20Submission&body=Please%20find%20my%20SolidWorks%20automation%20code%20attached."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-primary text-white font-semibold px-5 py-2 rounded-lg shadow hover:bg-primary/80 transition text-sm"
+              >
+                Compose Email in Gmail
+              </a>
+            </div>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { CheckCircle2, Phone } from "lucide-react";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 import consultationImage from "@/assets/consultation-image.jpg";
 import rotatingBadge from "@/assets/rotating-badge.png";
 
@@ -91,17 +92,18 @@ const GetInTouchSection = () => {
                 size="lg"
                 variant="gradient"
                 className="text-base md:text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-shadow"
+                asChild
               >
-                Book Appointment
+                <Link to="/contact">Book Appointment</Link>
               </Button>
               
               <Button 
                 size="lg"
                 variant="outline"
                 className="text-base md:text-lg px-8 py-6 rounded-full border-2 border-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                asChild
               >
-                <Phone className="w-5 h-5 mr-2" />
-                Contact us
+                <Link to="/contact"><Phone className="w-5 h-5 mr-2" />Contact us</Link>
               </Button>
             </div>
           </motion.div>

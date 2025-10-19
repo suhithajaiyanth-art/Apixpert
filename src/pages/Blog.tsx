@@ -1,4 +1,6 @@
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 
 const Blog = () => {
   return (
@@ -10,6 +12,8 @@ const Blog = () => {
           Latest insights and updates from the world of CAD design and automation.
         </p>
       </div>
+  <Footer />
+  <ScrollToTopButton />
     </div>
   );
 };

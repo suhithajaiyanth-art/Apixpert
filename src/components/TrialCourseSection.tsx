@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 import ThrowableElements from "./ThrowableElements";
 
 const TrialCourseSection = () => {
@@ -46,9 +47,9 @@ const TrialCourseSection = () => {
             <Button
               size="lg"
               className="mt-8 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold px-8 py-6 rounded-full text-base md:text-lg shadow-xl hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300"
+              asChild
             >
-              Explore Trial Course
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <Link to="/courses">Explore Trial Course <ArrowRight className="w-5 h-5 ml-2" /></Link>
             </Button>
           </motion.div>
         </div>

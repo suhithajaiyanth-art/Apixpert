@@ -1,4 +1,6 @@
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 
 const Login = () => {
   return (
@@ -10,6 +12,8 @@ const Login = () => {
           Access your account or create a new one to get started.
         </p>
       </div>
+  <Footer />
+  <ScrollToTopButton />
     </div>
   );
 };

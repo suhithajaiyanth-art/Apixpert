@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Star, CreditCard, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
 const EMIOffersSection = () => {
@@ -75,11 +76,10 @@ const EMIOffersSection = () => {
                 </Button>
                 
                 <Button 
-                  variant="outline"
-                  className="w-full border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/40 py-6 rounded-xl backdrop-blur-sm transition-all duration-300"
+                  className="w-full bg-black text-white hover:bg-gray-900 border-2 border-white/20 font-semibold py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  asChild
                 >
-                  View Courses
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                  <Link to="/courses">View Courses<ArrowRight className="ml-2 w-5 h-5 text-white" /></Link>
                 </Button>
               </motion.div>
 

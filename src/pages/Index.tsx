@@ -7,21 +7,29 @@ import TrialCourseSection from "@/components/TrialCourseSection";
 import EMIOffersSection from "@/components/EMIOffersSection";
 import AITrainingSection from "@/components/AITrainingSection";
 import TopCompaniesSection from "@/components/TopCompaniesSection";
+import JobPortalSection from "@/components/JobPortalSection";
 import NewsletterPopup from "@/components/NewsletterPopup";
+import Footer from "@/components/Footer";
+import MostPopularCourses from "@/components/MostPopularCourses";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
       <Navigation />
-      <Hero />
-      <LogoCarousel />
-      <ExpertiseSection />
-      <GetInTouchSection />
-      <TrialCourseSection />
-      <EMIOffersSection />
-      <AITrainingSection />
+  <Hero />
+  <LogoCarousel />
+  <ExpertiseSection />
+  <GetInTouchSection />
+  <TrialCourseSection />
+  <MostPopularCourses />
+  <EMIOffersSection />
+  <AITrainingSection />
   <TopCompaniesSection />
-      <NewsletterPopup />
+  <JobPortalSection />
+  <NewsletterPopup />
+  <Footer />
+      <ScrollToTopButton />
     </div>
   );
 };
