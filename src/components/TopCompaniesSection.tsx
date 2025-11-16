@@ -31,9 +31,9 @@ const renderTag = (label: string, direction: "ltr" | "rtl", key: number) => {
       key={`${label}-${key}`}
       className="flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 py-2 text-sm font-semibold text-slate-900 shadow-[0_10px_25px_rgba(15,23,42,0.08)] transition-transform duration-300 md:text-base"
     >
-      {direction === "rtl" && <span className="text-primary">{arrow}</span>}
+      {direction === "rtl" && <span className="text-blue-500">{arrow}</span>}
       <span>{label}</span>
-      {direction === "ltr" && <span className="text-primary">{arrow}</span>}
+      {direction === "ltr" && <span className="text-blue-500">{arrow}</span>}
     </span>
   );
 };

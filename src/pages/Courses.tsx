@@ -5,6 +5,14 @@ import { useEffect, useMemo, useState } from "react";
 import Footer from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { Filter, Search } from "lucide-react";
+import autocadPng from "../assets/Autocad.png";
+import vbdotnetPng from "../assets/vbdotnet.png";
+import nxPng from "../assets/nx.png";
+import creoPng from "../assets/creo.png";
+import catiaPng from "../assets/catia.png";
+import solidworksPng from "../assets/solidworks.png";
+import pythonCoursePng from "../assets/python_course.png";
+import csharpPng from "../assets/ccourses.png";
 
 type Course = {
   id: number;
@@ -15,7 +23,7 @@ type Course = {
   bundlePrice?: number | null;
 };
 
-const COURSE_CATALOG: Course[] = [
+export const COURSE_CATALOG: Course[] = [
   { id: 1, name: "C# for Automation (Live)", type: "Single", actualPrice: 47200, offerPrice: 23600 },
   { id: 2, name: "C# for Automation (Recorded with Live Support)", type: "Single", actualPrice: 23600, offerPrice: 11800, bundlePrice: 8260 },
   { id: 3, name: "VBA/VB.NET for Automation (Live)", type: "Single", actualPrice: 35400, offerPrice: 17700 },
@@ -122,7 +130,7 @@ type CourseCardContent = {
 const Courses = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"all" | "single" | "bundle">("all");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
 
   const courses = useMemo<CourseCardContent[]>(() => {
     return COURSE_CATALOG.map((course, index) => {
@@ -147,8 +155,21 @@ const Courses = () => {
       const bestAvailable = offerFee ?? standardFee ?? bundleFee ?? "";
 
       const imagePool = course.type === "Bundle Offer" ? BUNDLE_IMAGES : SINGLE_IMAGES;
-      const image = imagePool[index % imagePool.length];
+      let image = imagePool[index % imagePool.length];
       const colorScheme = COLOR_SEQUENCE[index % COLOR_SEQUENCE.length];
+
+      const nameLower = course.name.toLowerCase();
+      if (nameLower.includes("c#")) {
+        image = csharpPng;
+      } else if (nameLower.includes("solidworks")) {
+        image = solidworksPng;
+      } else if (nameLower.includes("catia")) {
+        image = catiaPng;
+      } else if (nameLower.includes("python")) {
+        image = pythonCoursePng;
+      } else if (nameLower.includes("creo")) {
+        image = creoPng;
+      }
 
       return {
         id: course.id,
@@ -170,10 +191,44 @@ const Courses = () => {
   const filteredCourses = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
     return courses.filter((course) => {
-      const matchesType =
-        typeFilter === "all" ||
-        (typeFilter === "single" && course.category === "Single Course") ||
-        (typeFilter === "bundle" && course.category === "Bundle Offer");
+      let matchesType = false;
+      switch (typeFilter) {
+        case "all":
+        case "nofilter":
+          matchesType = true;
+          break;
+        case "single":
+          matchesType = course.category === "Single Course";
+          break;
+        case "bundle":
+        case "Bundle Offer":
+          matchesType = course.category === "Bundle Offer";
+          break;
+        case "solidworks":
+          matchesType = course.title.toLowerCase().includes("solidworks");
+          break;
+        case "ugnx":
+        case "ug nx":
+          matchesType = course.title.toLowerCase().includes("nx");
+          break;
+        case "catia":
+          matchesType = course.title.toLowerCase().includes("catia");
+          break;
+        case "autocad":
+          matchesType = course.title.toLowerCase().includes("autocad");
+          break;
+        case "design":
+          matchesType = course.title.toLowerCase().includes("design");
+          break;
+        case "trial":
+          matchesType = course.title.toLowerCase().includes("trial");
+          break;
+        case "automation":
+          matchesType = course.title.toLowerCase().includes("automation");
+          break;
+        default:
+          matchesType = true;
+      }
       const matchesTerm =
         term.length === 0 ||
         course.title.toLowerCase().includes(term) ||
@@ -225,50 +280,46 @@ const Courses = () => {
           </motion.div>
         </div>
 
-        <motion.div
-          className="mb-12 flex flex-col gap-5 rounded-[32px] border border-white/10 bg-gradient-to-br from-[#0b132e]/90 via-[#0f1739]/90 to-[#19254c]/90 p-6 shadow-[0_35px_80px_rgba(11,18,45,0.55)] backdrop-blur-xl md:flex-row md:items-center md:justify-between"
-          initial={{ opacity: 0, y: 10 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-          transition={{ duration: 0.6, delay: 0.35, ease: [0.19, 1, 0.22, 1] }}
-        >
-          <div className="flex-1 w-full">
-            <label htmlFor="course-search" className="text-[11px] uppercase tracking-[0.4em] text-white">
-              Search programs
-            </label>
-            <div className="relative mt-3">
-              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-primary/60" />
-              <input
-                id="course-search"
-                type="search"
-                placeholder="Search by course name or focus area"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                className="w-full rounded-3xl border border-white/15 bg-black/60 px-12 py-3 text-sm text-white shadow-[0_18px_45px_rgba(8,16,40,0.45)] placeholder:text-white/55 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
-              />
-            </div>
+        {/* New Filter UI - two rows of gradient tabs */}
+        <div className="mb-12">
+          <div className="flex flex-wrap gap-6 justify-start mb-6">
+            {[
+              { label: "All Courses", value: "all" },
+              { label: "SolidWorks", value: "solidworks" },
+              { label: "UG NX", value: "ugnx" },
+              { label: "CATIA", value: "catia" },
+              { label: "AutoCAD", value: "autocad" },
+            ].map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setTypeFilter(tab.value as any)}
+                className={`px-8 py-4 rounded-2xl font-semibold text-lg transition-all ${typeFilter === tab.value ? "bg-gradient-to-b from-fuchsia-500 to-sky-400 text-white" : "bg-gray-200 text-black"}`}
+                style={{ minWidth: 170 }}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
-          <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-end md:gap-5">
-            <div className="md:min-w-[12rem]">
-              <span className="text-[11px] uppercase tracking-[0.4em] text-white">Course type</span>
-              <div className="relative mt-3">
-                <Filter className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-primary/60" />
-                <select
-                  value={typeFilter}
-                  onChange={(event) => setTypeFilter(event.target.value as typeof typeFilter)}
-                  className="w-full appearance-none rounded-3xl border border-white/15 bg-black/60 px-12 py-3 text-sm text-white shadow-[0_18px_45px_rgba(8,16,40,0.45)] focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
-                >
-                  <option value="all">All offerings</option>
-                  <option value="single">Single courses</option>
-                  <option value="bundle">Bundle offers</option>
-                </select>
-                <span className="pointer-events-none absolute right-5 top-1/2 flex -translate-y-1/2 text-white">▾</span>
-              </div>
-            </div>
-            <div className="rounded-3xl border border-primary/30 bg-primary/15 px-5 py-3 text-sm text-white shadow-[0_15px_40px_rgba(16,95,254,0.35)]">
-              Showing <span className="font-semibold text-primary/90">{filteredCourses.length}</span> of {courses.length} programs
-            </div>
+          <hr className="border-t border-black/70 mb-8" />
+          <div className="flex flex-wrap gap-6 justify-center">
+            {[
+              { label: "No Filter", value: "nofilter" },
+              { label: "Design", value: "design" },
+              { label: "Trial", value: "trial" },
+              { label: "Automation", value: "automation" },
+              { label: "Bundle Offer", value: "bundle" },
+            ].map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setTypeFilter(tab.value as any)}
+                className={`px-8 py-4 rounded-2xl font-semibold text-lg transition-all ${typeFilter === tab.value ? "bg-gradient-to-b from-fuchsia-500 to-sky-400 text-white" : "bg-gray-200 text-black"}`}
+                style={{ minWidth: 170 }}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
-        </motion.div>
+        </div>
 
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"

@@ -1,208 +1,50 @@
-import Navigation from "@/components/Navigation";
-import ScrollToTopButton from "@/components/ScrollToTopButton";
-import { useState, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Upload, Send, FileArchive } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import Footer from "@/components/Footer";
 
-interface Message {
-  id: string;
-  type: "user" | "system";
-  content: string;
-  fileName?: string;
-  timestamp: Date;
-}
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import { useState } from "react";
 
 const CADGPT = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      type: "system",
-      content: "Welcome! Share your SolidWorks code files (in ZIP format) to help us train CAD GPT. Upload your automation scripts, macros, or custom code to contribute to our AI training.",
-      timestamp: new Date(),
-    },
-  ]);
-  const [inputMessage, setInputMessage] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const { toast } = useToast();
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (!file.name.endsWith('.zip')) {
-        toast({
-          title: "Invalid file type",
-          description: "Please upload a ZIP file containing your SolidWorks code.",
-          variant: "destructive",
-        });
-        return;
-      }
-      setSelectedFile(file);
-      toast({
-        title: "File selected",
-        description: `${file.name} is ready to upload`,
-      });
-    }
-  };
-
-  const handleSubmit = () => {
-    if (!inputMessage.trim() && !selectedFile) return;
-
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      type: "user",
-      content: inputMessage || "Uploaded a file",
-      fileName: selectedFile?.name,
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, newMessage]);
-
-    // Simulate system response
-    setTimeout(() => {
-      const systemResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        type: "system",
-        content: selectedFile
-          ? `Thank you for submitting ${selectedFile.name}! Your SolidWorks code will help improve CAD GPT. Our team will review it shortly.`
-          : "Thank you for your message! Feel free to upload your code files to contribute.",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, systemResponse]);
-    }, 1000);
-
-    setInputMessage("");
-    setSelectedFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
+  const [prompt, setPrompt] = useState("");
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#18181b] flex flex-col">
       <Navigation />
-      <div className="container mx-auto px-6 pt-32 pb-16 max-w-5xl">
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-            CAD GPT Training Portal
-          </h1>
-          <p className="text-lg text-muted-foreground">
-            Help us train our AI by sharing your SolidWorks automation code
+      <main className="flex-1 flex flex-col items-center justify-center px-4 pt-24 pb-12">
+        {/* Heading and subtitle only */}
+        <div className="mb-6 flex flex-col items-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2 text-center">Meet CADGPT</h1>
+          <p className="text-lg text-gray-300 text-center max-w-2xl">
+            CADGPT turns concepts into production-ready CAD automation, saving time and eliminating technical barriers.
           </p>
         </div>
-
-        <div className="bg-card rounded-2xl shadow-xl border border-border overflow-hidden">
-          {/* Chat Messages Area */}
-          <ScrollArea className="h-[500px] p-6">
-            <div className="space-y-4">
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  <div
-                    className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                      message.type === "user"
-                        ? "bg-gradient-to-r from-primary to-purple-600 text-white"
-                        : "bg-muted text-foreground"
-                    }`}
-                  >
-                    {message.fileName && (
-                      <div className="flex items-center gap-2 mb-2 pb-2 border-b border-white/20">
-                        <FileArchive className="w-4 h-4" />
-                        <span className="text-sm font-medium">{message.fileName}</span>
-                      </div>
-                    )}
-                    <p className="text-sm">{message.content}</p>
-                    <p className={`text-xs mt-1 ${message.type === "user" ? "text-white/70" : "text-muted-foreground"}`}>
-                      {message.timestamp.toLocaleTimeString()}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </ScrollArea>
-
-          {/* Input Area */}
-          <div className="border-t border-border bg-muted/30 p-4">
-            {selectedFile && (
-              <div className="mb-3 flex items-center gap-2 bg-primary/10 rounded-lg px-3 py-2">
-                <FileArchive className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium text-foreground flex-1">{selectedFile.name}</span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedFile(null);
-                    if (fileInputRef.current) fileInputRef.current.value = "";
-                  }}
-                >
-                  Remove
-                </Button>
-            <ScrollToTopButton />
-              </div>
-            )}
-
-            <div className="flex gap-3">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".zip"
-                onChange={handleFileSelect}
-                className="hidden"
-              />
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => fileInputRef.current?.click()}
-                className="shrink-0"
-              >
-                <Upload className="w-4 h-4" />
-              </Button>
-
-              <Textarea
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Add a message about your code submission..."
-                className="resize-none min-h-[60px]"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit();
-                  }
-                }}
-              />
-
-              <Button
-                onClick={handleSubmit}
-                disabled={!inputMessage.trim() && !selectedFile}
-                className="shrink-0 bg-gradient-to-r from-primary to-purple-600 hover:opacity-90"
-                size="icon"
-              >
-                <Send className="w-4 h-4" />
-              </Button>
-            </div>
-
-            <p className="text-xs text-muted-foreground mt-3 text-center">
-              Upload ZIP files containing SolidWorks API code, NX Open scripts, or CAD automation files
-            </p>
-            <div className="flex justify-center mt-4">
-              <a
-                href="https://mail.google.com/mail/?view=cm&fs=1&to=sales@apixpert.com&su=CAD%20GPT%20Code%20Submission&body=Please%20find%20my%20SolidWorks%20automation%20code%20attached."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-primary text-white font-semibold px-5 py-2 rounded-lg shadow hover:bg-primary/80 transition text-sm"
-              >
-                Compose Email in Gmail
-              </a>
-            </div>
+        {/* Prompt Box */}
+        <form className="w-full max-w-3xl flex flex-col items-center" onSubmit={e => { e.preventDefault(); /* handle prompt submit here */ }}>
+          <div className="w-full">
+            <textarea
+              className="w-full h-32 md:h-24 bg-black/40 border-2 border-gray-500 rounded-2xl text-white text-lg p-6 focus:outline-none focus:border-blue-500 transition resize-none placeholder-gray-400"
+              placeholder="Build me a clo..."
+              value={prompt}
+              onChange={e => setPrompt(e.target.value)}
+            />
           </div>
-        </div>
-      </div>
+          <button
+            type="submit"
+            className="absolute right-8 bottom-8 md:static md:mt-6 flex items-center justify-center bg-white text-black font-bold text-xl rounded-full w-12 h-12 shadow-lg hover:bg-gray-200 transition md:w-auto md:px-10 md:py-4 md:rounded-full md:text-lg md:font-semibold md:shadow-xl md:bg-white md:hover:bg-gray-100"
+            style={{marginTop: '1.5rem'}}
+          >
+            <span className="hidden md:inline-block mr-2">Start Building</span>
+            <span className="inline-block md:hidden">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#fff"/><path d="M12 7v7m0 0l3-3m-3 3l-3-3" stroke="#18181b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </span>
+            <span className="md:hidden">
+              <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M10 5v6m0 0l2.5-2.5M10 11l-2.5-2.5" stroke="#18181b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </span>
+          </button>
+          <div className="mt-8 text-center w-full">
+            <p className="text-lg text-white font-semibold">AI Training for Interview and Monk test related to Design</p>
+          </div>
+        </form>
+      </main>
       <Footer />
     </div>
   );

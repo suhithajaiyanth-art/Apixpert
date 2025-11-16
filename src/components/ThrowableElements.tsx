@@ -90,10 +90,13 @@ const ThrowableElements = ({ tags }: ThrowableElementsProps) => {
     const bodies: Matter.Body[] = [];
     tags.forEach((tag, index) => {
       const x = Math.random() * (container.clientWidth - 200) + 100;
-      const y = Math.random() * (container.clientHeight - 200) + 100;
-      const radius = 60 + Math.random() * 20;
+      const y = Math.random() * (container.clientHeight - 100) + 50;
+      const width = 120 + Math.random() * 30; // Capsule width
+      const height = 40 + Math.random() * 10; // Capsule height
 
-      const circle = Bodies.circle(x, y, radius, {
+      // Capsule = rounded rectangle
+      const capsule = Bodies.rectangle(x, y, width, height, {
+        chamfer: { radius: height / 2 },
         restitution: 0.7,
         friction: 0.05,
         frictionAir: 0.01,
@@ -104,15 +107,23 @@ const ThrowableElements = ({ tags }: ThrowableElementsProps) => {
         },
         label: tag,
       });
+      const capsuleBody = capsule as Matter.Body & {
+        plugin: { capsuleHeight?: number; capsuleWidth?: number };
+      };
+      capsuleBody.plugin = {
+        ...capsuleBody.plugin,
+        capsuleHeight: height,
+        capsuleWidth: width,
+      };
 
       // Add initial velocity for floating effect
-      Matter.Body.setVelocity(circle, {
+      Matter.Body.setVelocity(capsule, {
         x: (Math.random() - 0.5) * 2,
         y: (Math.random() - 0.5) * 2,
       });
 
-      bodies.push(circle);
-      bodiesRef.current.push(circle);
+      bodies.push(capsule);
+      bodiesRef.current.push(capsule);
     });
 
     // Add all bodies to the world
@@ -156,7 +167,11 @@ const ThrowableElements = ({ tags }: ThrowableElementsProps) => {
       });
     });
 
-    // Add gentle floating motion
+
+    // Add gentle floating motion and respawn if out of bounds
+    let docked = false;
+    const capsuleMarginY = 32; // Margin from bottom (px)
+    const capsuleMarginX = 32; // Margin from right (px)
     const floatingAnimation = () => {
       bodies.forEach((body, index) => {
         const time = Date.now() * 0.001;
@@ -164,7 +179,39 @@ const ThrowableElements = ({ tags }: ThrowableElementsProps) => {
           x: Math.sin(time + index) * 0.00005,
           y: Math.cos(time + index) * 0.00005,
         };
-        Matter.Body.applyForce(body, body.position, force);
+        // Only apply force if not docked
+        if (!body.isStatic) {
+          Matter.Body.applyForce(body, body.position, force);
+        }
+
+        // Dock the first capsule that falls below the bottom right, keeping it fully visible
+        const pluginData = (body as Matter.Body & { plugin?: { capsuleHeight?: number; capsuleWidth?: number } }).plugin;
+        const capsuleHeight = pluginData?.capsuleHeight ?? 60;
+        const capsuleWidth = pluginData?.capsuleWidth ?? 160;
+        const dockY = container.clientHeight - capsuleHeight / 2 - capsuleMarginY;
+        const dockX = container.clientWidth - capsuleWidth / 2 - capsuleMarginX;
+        if (!docked && body.position.y > dockY) {
+          Matter.Body.setPosition(body, {
+            x: dockX,
+            y: dockY,
+          });
+          Matter.Body.setVelocity(body, { x: 0, y: 0 });
+          Matter.Body.setAngularVelocity(body, 0);
+          Matter.Body.setAngle(body, 0);
+          body.isStatic = true;
+          docked = true;
+        }
+
+        // If docked, keep it fixed at the bottom right
+        if (body.isStatic) {
+          Matter.Body.setPosition(body, {
+            x: dockX,
+            y: dockY,
+          });
+          Matter.Body.setVelocity(body, { x: 0, y: 0 });
+          Matter.Body.setAngularVelocity(body, 0);
+          Matter.Body.setAngle(body, 0);
+        }
       });
     };
 
